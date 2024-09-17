@@ -11,20 +11,10 @@ import SoftTypography from "components/SoftTypography";
 // Soft UI Dashboard React base styles
 import typography from "assets/theme/base/typography";
 
-function Footer({ company, links }) {
+function Footer({ company }) {
   const { href, name } = company;
   const { size } = typography;
 
-  const renderLinks = () =>
-    links.map((link) => (
-      <SoftBox key={link.name} component="li" px={2} lineHeight={1}>
-        <Link href={link.href} target="_blank">
-          <SoftTypography variant="button" fontWeight="regular" color="text">
-            {link.name}
-          </SoftTypography>
-        </Link>
-      </SoftBox>
-    ));
 
   return (
     <SoftBox
@@ -45,15 +35,10 @@ function Footer({ company, links }) {
         px={1.5}
       >
         &copy; {new Date().getFullYear()}, made with
-        <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
-          <Icon color="inherit" fontSize="inherit">
-            favorite
-          </Icon>
-        </SoftBox>
         by
         <Link href={href} target="_blank">
           <SoftTypography variant="button" fontWeight="medium">
-            &nbsp;{name}&nbsp;
+            &nbsp;Shukurov Shodiyor &nbsp;
           </SoftTypography>
         </Link>
         for a better web.
@@ -75,7 +60,6 @@ function Footer({ company, links }) {
           },
         })}
       >
-        {renderLinks()}
       </SoftBox>
     </SoftBox>
   );

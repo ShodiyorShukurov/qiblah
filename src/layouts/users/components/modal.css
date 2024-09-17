@@ -1,0 +1,7 @@
+.custom-modal .modal-dialog {
+  z-index: 1300 !important; 
+}
+
+.custom-modal .modal-backdrop {
+  z-index: 1200 !important; 
+}

@@ -20,6 +20,7 @@ import NewsModal from "./components/modal";
 function News() {
   const {
     isLoading,
+    data,
     error,
     handleClickOpen,
     open,
@@ -29,8 +30,11 @@ function News() {
     setSelectedItem,
     handleEdit,
     allUsers,
+    setNext,
+    next,
+    handleEditStatus,
   } = useNews();
-  const { columns, updatedRows } = AuthorsTable({handleEdit}); 
+  const { columns, updatedRows } = AuthorsTable({ handleEdit, handleEditStatus });
 
   if (isLoading) {
     return <DashboardLayout>Loading...</DashboardLayout>;
@@ -66,12 +70,24 @@ function News() {
 
         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
           <SoftBox mr={1}>
-            <SoftButton variant="text" color="dark" disabled>
-              Previous
-            </SoftButton>
-            <SoftButton variant="text" color="error" disabled>
-              next
-            </SoftButton>
+            {next > 1 ? (
+              <SoftButton variant="text" color="dark" onClick={() => setNext(next - 1)}>
+                Previous
+              </SoftButton>
+            ) : (
+              <SoftButton variant="text" color="dark" disabled>
+                Previous
+              </SoftButton>
+            )}
+            {data.length > 10 && isLoading ? (
+              <SoftButton variant="text" color="dark" onClick={() => setNext(next + 1)}>
+                next
+              </SoftButton>
+            ) : (
+              <SoftButton variant="text" color="dark" disabled>
+                next
+              </SoftButton>
+            )}
           </SoftBox>
           <SoftBox>
             <SoftButton variant="gradient" color="dark" onClick={handleClickOpen}>

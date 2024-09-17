@@ -1,34 +1,53 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import Api from "../api";
 
 const useNews = () => {
   const [open, setOpen] = React.useState(false);
   const [selectItem, setSelectedItem] = React.useState({});
+  const [next, setNext] = React.useState(1);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // API chaqiradigan funksiya
+  /**GET USERS**/
   const allUsers = async () => {
     try {
-      const res = await Api.get("/news/admin/list?limit=10&page=1");
-      return res.data.data; // Ma'lumotlarni qaytaramiz
+      const res = await Api.get(`/news/admin/list?limit=10&page=${next}`);
+      return res.data.data;
     } catch (error) {
       console.log(error);
-      throw error; // Xatoni tashlab yuboramiz, shunda `useQuery` uni ko'rishi mumkin
+      throw error;
     }
   };
 
+
+  const queryClient = useQueryClient();
+  /**EDIT STATUS FUNCTION**/
+  const handleEditStatus = async (status, id) => {
+    const data = {
+      news_id: id,
+      status: status,
+    };
+
+    try {
+      const res = await Api.put("/news/edit/status", data);
+      if (res.data) {
+        queryClient.invalidateQueries("news");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**EDIT FUNCTION**/
   const handleEdit = (item) => {
     handleClickOpen();
     setSelectedItem(item);
   };
 
-  // useQuery chaqirishi
   const response = useQuery("news", allUsers);
 
-  // Zarur bo'lgan qiymatlarni qaytarish
   return {
     data: response.data,
     isLoading: response.isLoading,
@@ -41,6 +60,9 @@ const useNews = () => {
     selectItem,
     setSelectedItem,
     allUsers,
+    setNext,
+    next,
+    handleEditStatus,
   };
 };
 

@@ -3,15 +3,19 @@ import PropTypes from "prop-types";
 import { useFormik } from "formik";
 import { useQueryClient } from "react-query";
 import Api from "api";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from "reactstrap";
 
-export default function NewsModal({
-  handleClose,
-  open,
-  setOpen,
-  setSelectedItem,
-  selectItem,
-  allUsers,
-}) {
+export default function NewsModal({ handleClose, open, setOpen, setSelectedItem, selectItem }) {
   const queryClient = useQueryClient();
 
   const formik = useFormik({
@@ -39,7 +43,7 @@ export default function NewsModal({
         formData.append("news_id", selectItem.news_id);
         try {
           const res = await Api.put("/news/edit", formData);
-          if(res.data){
+          if (res.data) {
             setSelectedItem({});
             queryClient.invalidateQueries("news");
             setOpen(false);
@@ -62,156 +66,130 @@ export default function NewsModal({
   });
 
   return (
-    <div>
-      {open ? (
-        <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          role="dialog"
-          onClick={handleClose}
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", zIndex: 1000 }}
-        >
-          <div className="modal-dialog" role="document" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">ADD</h5>
-                <button type="button" className="btn-close" onClick={handleClose}></button>
-              </div>
-              <form onSubmit={formik.handleSubmit}>
-                <div className="modal-body">
-                  <div className="mb-2">
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik.touched.news_title && formik.errors.news_title ? "is-invalid" : ""
-                      }`}
-                      id="title"
-                      name="news_title"
-                      value={formik.values.news_title}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      placeholder="Title"
-                      required
-                    />
-                    {formik.touched.news_title && formik.errors.news_title && (
-                      <div className="invalid-feedback">{formik.errors.news_title}</div>
-                    )}
-                  </div>
+    <Modal
+      isOpen={open}
+      toggle={handleClose}
+      className="custom-modal"
+    >
+      <ModalHeader>ADD</ModalHeader>
+      <Form onSubmit={formik.handleSubmit}>
+        <ModalBody>
+          <FormGroup>
+            <Input
+              type="text"
+              name="news_title"
+              id="news_title"
+              value={formik.values.news_title}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              invalid={formik.touched.news_title && !!formik.errors.news_title}
+              placeholder="Title"
+              required
+            />
+            {formik.touched.news_title && formik.errors.news_title && (
+              <div className="invalid-feedback">{formik.errors.news_title}</div>
+            )}
+          </FormGroup>
 
-                  <div className="mb-3">
-                    <textarea
-                      type="text"
-                      className={`form-control ${
-                        formik.touched.news_description && formik.errors.news_description
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      id="desc"
-                      name="news_description"
-                      value={formik.values.news_description}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      placeholder="Description"
-                    />
-                    {formik.touched.news_description && formik.errors.news_description && (
-                      <div className="invalid-feedback">{formik.errors.news_description}</div>
-                    )}
-                  </div>
+          <FormGroup>
+            <Input
+              type="textarea"
+              name="news_description"
+              id="news_description"
+              value={formik.values.news_description}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              invalid={formik.touched.news_description && !!formik.errors.news_description}
+              placeholder="Description"
+            />
+            {formik.touched.news_description && formik.errors.news_description && (
+              <div className="invalid-feedback">{formik.errors.news_description}</div>
+            )}
+          </FormGroup>
 
-                  <div className="mb-3">
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik.touched.news_button_text && formik.errors.news_button_text
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      name="news_button_text"
-                      value={formik.values.news_button_text}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      placeholder="Button Text"
-                    />
-                    {formik.touched.news_button_text && formik.errors.news_button_text && (
-                      <div className="invalid-feedback">{formik.errors.news_button_text}</div>
-                    )}
-                  </div>
+          <FormGroup>
+            <Input
+              type="text"
+              name="news_button_text"
+              id="news_button_text"
+              value={formik.values.news_button_text}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              invalid={formik.touched.news_button_text && !!formik.errors.news_button_text}
+              placeholder="Button Text"
+            />
+            {formik.touched.news_button_text && formik.errors.news_button_text && (
+              <div className="invalid-feedback">{formik.errors.news_button_text}</div>
+            )}
+          </FormGroup>
 
-                  <div className="mb-3">
-                    <input
-                      type="url"
-                      className={`form-control ${
-                        formik.touched.news_link && formik.errors.news_link ? "is-invalid" : ""
-                      }`}
-                      name="news_link"
-                      value={formik.values.news_link}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      placeholder="News Link"
-                    />
-                    {formik.touched.news_link && formik.errors.news_link && (
-                      <div className="invalid-feedback">{formik.errors.news_link}</div>
-                    )}
-                  </div>
+          <FormGroup>
+            <Input
+              type="url"
+              name="news_link"
+              id="news_link"
+              value={formik.values.news_link}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              invalid={formik.touched.news_link && !!formik.errors.news_link}
+              placeholder="News Link"
+            />
+            {formik.touched.news_link && formik.errors.news_link && (
+              <div className="invalid-feedback">{formik.errors.news_link}</div>
+            )}
+          </FormGroup>
 
-                  <div className="mb-3">
-                    <select
-                      className={`form-select ${
-                        formik.touched.news_language && formik.errors.news_language
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      name="news_language"
-                      value={formik.values.news_language}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      required
-                    >
-                      <option value="" disabled>
-                        Select Language
-                      </option>
-                      <option value="uzbek">Uzbek</option>
-                      <option value="cyrillic">Cyrillic</option>
-                      <option value="english">English</option>
-                      <option value="russian">Russian</option>
-                      <option value="kazakh">Kazakh</option>
-                    </select>
-                    {formik.touched.news_language && formik.errors.news_language && (
-                      <div className="invalid-feedback">{formik.errors.news_language}</div>
-                    )}
-                  </div>
+          <FormGroup>
+            <Input
+              type="select"
+              name="news_language"
+              id="news_language"
+              value={formik.values.news_language}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              invalid={formik.touched.news_language && !!formik.errors.news_language}
+              required
+            >
+              <option value="" disabled>
+                Select Language
+              </option>
+              <option value="uzbek">Uzbek</option>
+              <option value="cyrillic">Cyrillic</option>
+              <option value="english">English</option>
+              <option value="russian">Russian</option>
+              <option value="kazakh">Kazakh</option>
+            </Input>
+            {formik.touched.news_language && formik.errors.news_language && (
+              <div className="invalid-feedback">{formik.errors.news_language}</div>
+            )}
+          </FormGroup>
 
-                  <div className="mb-3">
-                    <input
-                      type="file"
-                      className={`form-control ${
-                        formik.touched.news_file && formik.errors.news_file ? "is-invalid" : ""
-                      }`}
-                      name="news_file"
-                      onChange={(event) => {
-                        formik.setFieldValue("news_file", event.currentTarget.files[0]);
-                      }}
-                      onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.news_file && formik.errors.news_file && (
-                      <div className="invalid-feedback">{formik.errors.news_file}</div>
-                    )}
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-primary" type="submit">
-                    Submit
-                  </button>
-                  <button type="button" className="btn btn-secondary" onClick={handleClose}>
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </div>
+          <FormGroup>
+            <Input
+              type="file"
+              name="news_file"
+              id="news_file"
+              onChange={(event) => {
+                formik.setFieldValue("news_file", event.currentTarget.files[0]);
+              }}
+              onBlur={formik.handleBlur}
+              invalid={formik.touched.news_file && !!formik.errors.news_file}
+            />
+            {formik.touched.news_file && formik.errors.news_file && (
+              <div className="invalid-feedback">{formik.errors.news_file}</div>
+            )}
+          </FormGroup>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" type="submit">
+            Submit
+          </Button>
+          <Button color="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Form>
+    </Modal>
   );
 }
 
@@ -219,7 +197,6 @@ NewsModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  allUsers: PropTypes.func.isRequired,
   setSelectedItem: PropTypes.func.isRequired,
   selectItem: PropTypes.object.isRequired,
 };

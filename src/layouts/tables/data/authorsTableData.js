@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-// Soft UI Dashboard React components
 import Icon from "@mui/material/Icon";
 import SoftBox from "components/SoftBox";
 import SoftButton from "components/SoftButton";
@@ -8,12 +6,9 @@ import SoftBadge from "components/SoftBadge";
 import Switch from "@mui/material/Switch";
 import useNews from "hooks/UseNews";
 
-// AuthorsTable komponenti
-const AuthorsTable = ({ handleEdit }) => {
-  // useNews hookini yuqori darajadagi komponent ichida chaqirish
-  const { data } = useNews(); // open va handleClose ni qo'shing
+const AuthorsTable = ({ handleEdit, handleEditStatus }) => {
+  const { data } = useNews();
 
-  // authorsTableData obyektini hookdan olingan data bilan yangilash
   const updatedRows = data
     ? data.map((news) => ({
         id: news.news_id,
@@ -39,7 +34,7 @@ const AuthorsTable = ({ handleEdit }) => {
         ),
         views: news.news_views,
         like: news.news_like,
-        active: <Switch checked={news.news_active} />,
+        active: <Switch checked={news.news_active} onChange={() => handleEditStatus(!news.news_active, news.news_id)} />,
         action: (
           <SoftBox mr={1}>
             <SoftButton variant="text" color="dark" onClick={() => handleEdit(news)}>
