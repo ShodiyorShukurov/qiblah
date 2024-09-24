@@ -6,7 +6,7 @@ import SoftBadge from "components/SoftBadge";
 import Switch from "@mui/material/Switch";
 import useNews from "hooks/UseNews";
 
-const AuthorsTable = ({ handleEdit, handleEditStatus }) => {
+const NewsData = ({ handleEdit, handleEditStatus, openDeleteModal }) => {
   const { data } = useNews();
 
   const updatedRows = data
@@ -34,13 +34,18 @@ const AuthorsTable = ({ handleEdit, handleEditStatus }) => {
         ),
         views: news.news_views,
         like: news.news_like,
-        active: <Switch checked={news.news_active} onChange={() => handleEditStatus(!news.news_active, news.news_id)} />,
+        active: (
+          <Switch
+            checked={news.news_active}
+            onChange={() => handleEditStatus(!news.news_active, news.news_id)}
+          />
+        ),
         action: (
           <SoftBox mr={1}>
             <SoftButton variant="text" color="dark" onClick={() => handleEdit(news)}>
               <Icon>edit</Icon>
             </SoftButton>
-            <SoftButton variant="text" color="error">
+            <SoftButton variant="text" color="error" onClick={()=>openDeleteModal(news.news_id)}>
               <Icon>delete</Icon>
             </SoftButton>
           </SoftBox>
@@ -64,4 +69,4 @@ const AuthorsTable = ({ handleEdit, handleEditStatus }) => {
   return { columns, updatedRows };
 };
 
-export default AuthorsTable;
+export default NewsData;

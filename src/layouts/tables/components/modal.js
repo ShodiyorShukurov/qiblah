@@ -14,6 +14,7 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import './modal.css'
 
 export default function NewsModal({ handleClose, open, setOpen, setSelectedItem, selectItem }) {
   const queryClient = useQueryClient();

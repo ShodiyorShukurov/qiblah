@@ -6,6 +6,8 @@ const useNews = () => {
   const [open, setOpen] = React.useState(false);
   const [selectItem, setSelectedItem] = React.useState({});
   const [next, setNext] = React.useState(1);
+  const [deleteModal, setDeleteModal] = React.useState(false);
+  const [id, setId] = React.useState(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -20,7 +22,6 @@ const useNews = () => {
       throw error;
     }
   };
-
 
   const queryClient = useQueryClient();
   /**EDIT STATUS FUNCTION**/
@@ -37,6 +38,7 @@ const useNews = () => {
       }
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 
@@ -44,6 +46,32 @@ const useNews = () => {
   const handleEdit = (item) => {
     handleClickOpen();
     setSelectedItem(item);
+  };
+
+  /**DELETE FUNCTION**/
+
+  const openDeleteModal = (id) => {
+    setId(id);
+    setDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+    setId(null);
+  };
+
+  const handleDelete = async () => {
+    const data = { news_id: Number(id) };
+    try {
+      const res = await Api.delete("/news/delete", { data });
+      if (res.data) {
+        setDeleteModal(false);
+        queryClient.invalidateQueries("news");
+      }
+    } catch (error) {
+      console.log(error.message);
+      throw error;
+    }
   };
 
   const response = useQuery("news", allUsers);
@@ -63,6 +91,10 @@ const useNews = () => {
     setNext,
     next,
     handleEditStatus,
+    openDeleteModal,
+    closeDeleteModal,
+    deleteModal,
+    handleDelete,
   };
 };
 

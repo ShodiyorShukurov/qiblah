@@ -13,9 +13,10 @@ import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
 // Data
-import AuthorsTable from "layouts/tables/data/authorsTableData";
+import NewsData from "layouts/tables/data/NewsData";
 import useNews from "hooks/UseNews";
 import NewsModal from "./components/modal";
+import NewsDeleteModal from "./components/deleteModal";
 
 function News() {
   const {
@@ -33,8 +34,12 @@ function News() {
     setNext,
     next,
     handleEditStatus,
+    openDeleteModal,
+    closeDeleteModal,
+    deleteModal,
+    handleDelete,
   } = useNews();
-  const { columns, updatedRows } = AuthorsTable({ handleEdit, handleEditStatus });
+  const { columns, updatedRows } = NewsData({ handleEdit, handleEditStatus,  openDeleteModal });
 
   if (isLoading) {
     return <DashboardLayout>Loading...</DashboardLayout>;
@@ -70,12 +75,8 @@ function News() {
 
         <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
           <SoftBox mr={1}>
-            {next > 1 ? (
+            {next > 1 && (
               <SoftButton variant="text" color="dark" onClick={() => setNext(next - 1)}>
-                Previous
-              </SoftButton>
-            ) : (
-              <SoftButton variant="text" color="dark" disabled>
                 Previous
               </SoftButton>
             )}
@@ -103,6 +104,13 @@ function News() {
         selectItem={selectItem}
         setSelectedItem={setSelectedItem}
         allUsers={allUsers}
+      />
+
+      <NewsDeleteModal
+        closeDeleteModal={closeDeleteModal}
+        deleteModal={deleteModal}
+        openDeleteModal={openDeleteModal}
+        handleDelete={handleDelete}
       />
       <Footer />
     </DashboardLayout>
