@@ -2,6 +2,7 @@
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Users from "layouts/users";
+import Transactions from "layouts/transactions";  
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
 import Profile from "layouts/profile";
@@ -42,6 +43,15 @@ const routes = [
     route: "/users",
     icon: <Office size="12px" />,
     component: <Users />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Transactions",
+    key: "transactions",
+    route: "/transactions",
+    icon: <CreditCard size="12px" />,
+    component: <Transactions />,
     noCollapse: true,
   },
   {

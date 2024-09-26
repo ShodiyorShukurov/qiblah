@@ -13,7 +13,7 @@ const useDashboard = () => {
     //   if (error.response?.status === 401) {
     //     window.location.reload();
     //   }
-      throw error; // Xatoni tashlab yuboramiz, shunda `useQuery` uni ko'rishi mumkin
+      throw error; 
     }
   };
 
